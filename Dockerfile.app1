@@ -1,0 +1,17 @@
+# Utiliza una imagen de Perl
+FROM perl:5.38.2
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Instala Dancer
+RUN cpanm Dancer2 JSON
+
+# Copia la aplicación Perl
+COPY app1/app.pl .
+
+# Expone el puerto en el que Dancer escucha
+EXPOSE 8080
+
+# Comando para ejecutar la aplicación Dancer
+CMD ["plackup", "app.pl", "--host", "0.0.0.0", "--port", "8080"]

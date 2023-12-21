@@ -1,0 +1,14 @@
+# Usa una imagen de PHP con Apache
+FROM php:7.4-apache
+
+# Copia el código de la aplicación al contenedor
+COPY app2/index.php /var/www/html/
+
+# Exponer el puerto 8080
+EXPOSE 8080
+
+# Configura Apache para escuchar en el puerto 8080
+RUN sed -i 's/80/8080/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+
+# Comando para iniciar el servidor web de Apache
+CMD ["apache2-foreground"]

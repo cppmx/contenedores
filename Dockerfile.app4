@@ -1,0 +1,23 @@
+# Etapa 1: Compilar y generar el JAR
+FROM openjdk:17-jdk-slim AS builder
+
+WORKDIR /app
+
+COPY app4/ .
+
+# Compila y genera el JAR
+RUN ./gradlew build
+
+# Etapa 2: Ejecutar la aplicación
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+# Copia solo los archivos necesarios de la etapa de compilación
+COPY --from=builder /app/build/libs/app4-0.0.1-SNAPSHOT.jar service.jar
+
+# Expone el puerto en el que la aplicación Spring Boot escucha
+EXPOSE 8080
+
+# Comando para ejecutar la aplicación Spring Boot
+CMD ["java", "-jar", "service.jar"]
