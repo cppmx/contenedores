@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  jenkins:
+    image: cppmx/unir:jenkins
+    ports:
+      - "8081:8080"
+
+  netdata:
+    image: cppmx/unir:netdata
+    ports:
+      - "8082:19999"
+
+  app3:
+    image: cppmx/unir:webgl
+    ports:
+      - "8083:80"
+
+  app4:
+    image: cppmx/unir:wordpress
+    ports:
+      - "8084:8080"

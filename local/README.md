@@ -1,11 +1,6 @@
 # Contenedores
 
-He realizado este proyecto para cumplir con la tarea del segundo semestre de la materia de Contenedores de la maestría en Desarrollo y Operaciones de Software de UNIR.
-
-La tarea consiste en la creación de cuatro imágenes de Docker para cuatro proyectos que usen diferentes lenguajes de programación.
-Aunque la tarea nos permite usar proyectos externos, he decidido crear las cuatro aplicaciones por mi cuenta para evitar el tener que lidiar con códigos ajenos y librerías obsoletas.
-
-Los cuatro proyectos que he creado son los siguientes:
+Los cuatro proyectos que he creado localmente son los siguientes:
 
 1. [Una aplicación REST API sencilla usando Perl](README_PERL.md)
 2. [Una aplicación REST API sencilla usando PHP](RAEDME_PHP.md)
