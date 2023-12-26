@@ -1,0 +1,12 @@
+# Utilizamos una imagen ligera de Nginx como base
+FROM nginx:alpine
+
+# Instalamos Git
+RUN apk update && apk --no-cache add git
+
+# Clonamos el repositorio
+RUN rm -fr /usr/share/nginx/html && \
+    git clone https://github.com/PavelDoGreat/WebGL-Fluid-Simulation.git /usr/share/nginx/html
+
+# Exponemos el puerto en el que Nginx escucha (puerto por defecto: 80)
+EXPOSE 80

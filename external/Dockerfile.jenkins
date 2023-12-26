@@ -1,0 +1,93 @@
+# Utilizamos la imagen oficial de Jenkins
+FROM jenkins/jenkins:2.437-jdk17
+
+ENV JENKINS_USER admin
+ENV JENKINS_PASS admin
+
+# Omitimos el Wizard inicial
+ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
+
+# Cambiamos al usuario root para realizar instalaciones adicionales
+USER root
+
+# Creamos un archivo con los plugins que deseamos instalar
+RUN cat <<EOF >> /usr/share/jenkins/plugins.txt
+ace-editor
+ant
+antisamy-markup-formatter
+branch-api
+cloudbees-folder
+credentials
+cvs
+docker-plugin
+durable-task
+external-monitor-job
+git-client
+git-server
+git
+github-api
+github-branch-source
+github
+javadoc
+jquery-detached
+junit
+ldap
+mailer
+matrix-auth
+matrix-project
+maven-plugin
+metrics
+pam-auth
+plain-credentials
+scm-api
+script-security
+ssh-credentials
+ssh-slaves
+subversion
+translation
+variant
+windows-slaves
+workflow-aggregator
+workflow-api
+workflow-basic-steps
+workflow-cps-global-lib
+workflow-cps
+workflow-durable-task-step
+workflow-job
+workflow-multibranch
+workflow-scm-step
+workflow-step-api
+workflow-support
+favorite
+token-macro
+pipeline-stage-step
+blueocean
+blueocean-autofavorite
+gitlab-plugin
+EOF
+
+# Instalamos los plugins
+RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/plugins.txt && \
+    # Actualizamos el sistema
+    apt-get update && \
+    # Agregamos el repositorio de Docker
+    apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-common && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - &&\
+    add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/debian \
+    $(lsb_release -cs) \
+    stable"
+
+# Volvemos a ejecutar el comadno de actualización para que considere el nuevo repositorio
+RUN apt-get update  -qq \
+    # Ahora instalamos docker
+    && apt-get install docker-ce -y && \
+    # Agregamos al usuario jenkins al grupo de Docker para que pueda ejecutar el comando docker
+    usermod -aG docker jenkins && \
+    # Limipamos la cache
+    apt-get clean && \
+    # Instalamos el comando docker-compose
+    curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+
+# Cambiamos al usuario jenkins
+USER jenkins

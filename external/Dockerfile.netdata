@@ -1,0 +1,15 @@
+# Utilizamos la imagen base de Alpine Linux
+FROM alpine:3.19.0
+
+# Instalamos dependencias necesarias para Netdata
+RUN apk update && apk add --no-cache curl jq bash
+
+# Descargamos e instalamos Netdata
+RUN curl -Ss "https://raw.githubusercontent.com/netdata/netdata/master/packaging/installer/install-required-packages.sh" >/tmp/install-required-packages.sh && bash /tmp/install-required-packages.sh -y
+RUN curl -Ss "https://raw.githubusercontent.com/netdata/netdata/master/packaging/installer/kickstart.sh" >/tmp/installer.sh && bash /tmp/installer.sh --non-interactive
+
+# Exponemos el puerto en el que Netdata escucha
+EXPOSE 19999
+
+# Comando para iniciar Netdata
+CMD ["/opt/netdata/bin/netdata", "-D"]

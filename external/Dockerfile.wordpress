@@ -1,0 +1,33 @@
+# Utilizamos una imagen base con soporte para PHP y Apache
+FROM php:7.4-apache
+
+# Activamos el superusuario
+USER root
+
+    # Primero actualizamos el sistema base
+RUN apt-get update -y && apt-get upgrade -y && \
+    # Luego instalamos las herramientas necesarias para la instalación y configuración de Wordpress
+    apt-get install unzip wget -y && \
+    # Por seguridad y para reducir el tamaño de la imagen, limpiamos el cache de instalación
+    apt-get clean && \
+    # Ahopra instalamos extensiones de PHP necesarias para WordPress
+    docker-php-ext-install mysqli pdo_mysql
+
+# Definimos el directorio de trabajo
+WORKDIR /var/www/html
+
+# Descargamos e instalamos WordPress
+RUN wget -q -O - \
+    https://raw.githubusercontent.com/luizbills/create-wordpress-sqlite/main/installer \
+    | bash && \
+    # Configuramos Apache para escuchar en el puerto 8080
+    sed -i 's/80/8080/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+
+# Exponemos el puerto 8080
+EXPOSE 8080
+
+# Establecemos el usuario por defecto que usarán los contenedores
+USER www-data
+
+# Comando para iniciar Apache
+CMD ["apache2-foreground"]
