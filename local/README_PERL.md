@@ -71,7 +71,7 @@ El hash que se le pasa a este comando es el mismo que nos arrojó el comando `do
 Para subir la imagen `unir:1` al repositorio público, primero hay que loguearse al repositorio:
 
 ```bash
-echo $DOCKER_HUB_CPPMX | docker login -u cppmx --password-stdin
+$ echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USER --password-stdin
 
 WARNING! Your password will be stored unencrypted in /home/ccolon/.docker/config.json.
 Configure a credential helper to remove this warning. See
@@ -80,7 +80,7 @@ https://docs.docker.com/engine/reference/commandline/login/#credentials-store
 Login Succeeded
 ```
 
-La variable de ambiente `DOCKER_HUB_CPPMX` yo la defino con el token de acceso a mi cuenta de Docker Hub.
+La variable de ambiente `DOCKER_HUB_PASSWORD` yo la defino con el token de acceso a mi cuenta de Docker Hub, y la variable de ambiente `DOCKER_HUB_USER` con mi nombre de usuario.
 
 El siguiente paso es crear un tag con el nombre del repositorio a donde será entregada la imagen, junto con un identificador:
 
